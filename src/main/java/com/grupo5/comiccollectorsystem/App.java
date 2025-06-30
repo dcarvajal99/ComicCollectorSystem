@@ -76,17 +76,17 @@ public class App {
                         System.out.println("Usuario registrado correctamente.");
                         break;
                     case 7:
-                        String tituloLibro, autorLibro, asignadoA;
-                        tituloLibro = pedirCampo(scanner, "Título");
-                        autorLibro = pedirCampo(scanner, "Autor");
+                        String tituloComic, autorComic, asignadoA;
+                        tituloComic = pedirCampo(scanner, "Título");
+                        autorComic = pedirCampo(scanner, "Autor");
                         System.out.print("Asignado a (email, dejar vacío si disponible): ");
                         asignadoA = scanner.nextLine().trim();
                         if (!asignadoA.isEmpty() && tiendaDeComics.getUsuarioPorEmail(asignadoA) == null) {
                             System.out.println("Error: El email ingresado no corresponde a un usuario registrado. El comic se registrará como disponible.");
                             asignadoA = "";
                         }
-                        tiendaDeComics.registrarComic(tituloLibro, autorLibro, asignadoA);
-                        System.out.println("Libro registrado correctamente.");
+                        tiendaDeComics.registrarComic(tituloComic, autorComic, asignadoA);
+                        System.out.println("Comic registrado correctamente.");
                         break;
                     case 8:
                         tiendaDeComics.guardarComicsEnCSV(DATA_DIR+"comics.csv");
