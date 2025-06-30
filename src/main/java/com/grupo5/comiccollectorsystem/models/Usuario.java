@@ -1,16 +1,26 @@
 package com.grupo5.comiccollectorsystem.models;
 
 public class Usuario {
+    private String id;
     private String nombre;
     private String apellido;
     private String email;
     private String telefono;
 
-    public Usuario(String nombre, String apellido, String email, String telefono) {
+    public Usuario(String id, String nombre, String apellido, String email, String telefono) {
+        this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.telefono = telefono;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -47,7 +57,7 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Nombre: " + nombre + ", Apellido: " + apellido + ", Email: " + email + ", Teléfono: " + telefono;
+        return "Id: " + id + ", Nombre: " + nombre + ", Apellido: " + apellido + ", Email: " + email + ", Teléfono: " + telefono;
     }
 
 }

@@ -187,7 +187,7 @@ public class App {
         String apellido = InputUtils.pedirCampoNoVacio(scanner, "Apellido");
         String email = InputUtils.pedirEmail(scanner);
         String telefono = InputUtils.pedirTelefono(scanner);
-        Usuario usuario = new Usuario(nombre, apellido, email, telefono);
+        Usuario usuario = new Usuario("", nombre, apellido, email, telefono);
         tiendaDeComics.registrarUsuario(usuario);
         System.out.println("Usuario registrado correctamente.");
     }

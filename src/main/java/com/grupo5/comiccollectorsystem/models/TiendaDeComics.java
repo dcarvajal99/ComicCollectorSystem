@@ -44,7 +44,7 @@ public class TiendaDeComics {
             if (esPrimera) { esPrimera = false; continue; } // Saltar cabecera
             if (fila.length == 5) {
                 // fila[0]=id, fila[1]=nombre, fila[2]=apellido, fila[3]=email, fila[4]=telefono
-                Usuario usuario = new Usuario(fila[1], fila[2], fila[3], fila[4]);
+                Usuario usuario = new Usuario(fila[0], fila[1], fila[2], fila[3], fila[4]);
                 usuarios.put(usuario.getEmail(), usuario);
             }
         }
@@ -76,11 +76,21 @@ public class TiendaDeComics {
     }
 
     public void registrarUsuario(Usuario usuario) {
-        // Usar HashSet para evitar duplicados por email
         if (usuarios.containsKey(usuario.getEmail())) {
             System.out.println("Error: Ya existe un usuario registrado con ese email.");
             return;
         }
+        // Asignar id incremental automáticamente
+        int maxId = 1;
+        for (Usuario u : usuarios.values()) {
+            try {
+                int idU = Integer.parseInt(u.getId());
+                if (idU >= maxId) maxId = idU + 1;
+            } catch (NumberFormatException e) {
+                // Ignorar ids no numéricos
+            }
+        }
+        usuario.setId(String.valueOf(maxId));
         usuarios.put(usuario.getEmail(), usuario);
     }
 
@@ -134,7 +144,6 @@ public class TiendaDeComics {
 
     public void guardarComicsEnCSV(String rutaArchivo) {
         List<String[]> datos = new ArrayList<>();
-        datos.add(new String[]{"id","titulo","autor","estado","asignadoA"});
         for (Comic comic : comics) {
             datos.add(new String[]{comic.getId(), comic.getTitulo(), comic.getAutor(), comic.getEstado().toString(), comic.getAsignadoA() == null ? "" : comic.getAsignadoA()});
         }
@@ -143,9 +152,8 @@ public class TiendaDeComics {
 
     public void guardarUsuariosEnCSV(String rutaArchivo) {
         List<String[]> datos = new ArrayList<>();
-        datos.add(new String[]{"nombre","apellido","email","telefono"});
         for (Usuario usuario : usuarios.values()) {
-            datos.add(new String[]{usuario.getNombre(), usuario.getApellido(), usuario.getEmail(), usuario.getTelefono()});
+            datos.add(new String[]{usuario.getId(), usuario.getNombre(), usuario.getApellido(), usuario.getEmail(), usuario.getTelefono()});
         }
         usuariosServicio.escribirUsuariosCSV(rutaArchivo, datos);
     }
