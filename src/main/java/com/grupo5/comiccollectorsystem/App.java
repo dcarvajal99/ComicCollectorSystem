@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class App {
 
-    private static final String DATA_DIR = "src/main/java/com/grupo5/biblioteca/data/";
+    private static final String DATA_DIR = "src/main/java/com/grupo5/comiccollectorsystem/data/";
 
     public static void main(String[] args) {
         TiendaDeComics tiendaDeComics = new TiendaDeComics();
