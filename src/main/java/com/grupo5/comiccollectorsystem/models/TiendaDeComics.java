@@ -76,6 +76,11 @@ public class TiendaDeComics {
     }
 
     public void registrarUsuario(Usuario usuario) {
+        // Usar HashSet para evitar duplicados por email
+        if (usuarios.containsKey(usuario.getEmail())) {
+            System.out.println("Error: Ya existe un usuario registrado con ese email.");
+            return;
+        }
         usuarios.put(usuario.getEmail(), usuario);
     }
 
@@ -86,6 +91,31 @@ public class TiendaDeComics {
             }
         }
         throw new ComicNoEncontradoException("Comic no encontrado: " + titulo);
+    }
+
+    /**
+     * Busca un cómic por su ID.
+     */
+    public Comic buscarComicPorId(String id) throws ComicNoEncontradoException {
+        for (Comic comic : comics) {
+            if (comic.getId().equals(id)) {
+                return comic;
+            }
+        }
+        throw new ComicNoEncontradoException("Comic no encontrado con ID: " + id);
+    }
+
+    /**
+     * Busca todos los cómics de un autor (ignorando mayúsculas/minúsculas).
+     */
+    public List<Comic> buscarComicsPorAutor(String autor) {
+        List<Comic> resultado = new ArrayList<>();
+        for (Comic comic : comics) {
+            if (comic.getAutor().equalsIgnoreCase(autor)) {
+                resultado.add(comic);
+            }
+        }
+        return resultado;
     }
 
     public void prestarComic(String titulo, String emailUsuario) throws ComicNoEncontradoException, ComicYaPrestadoException {
@@ -121,13 +151,14 @@ public class TiendaDeComics {
     }
 
     public void mostrarComics(String criterio) {
+        // TreeSet para evitar duplicados y mostrar cómics ordenados según el criterio
         Comparator<Comic> comparador;
         switch (criterio) {
             case "autor":
-                comparador = Comparator.comparing(Comic::getAutor);
+                comparador = Comparator.comparing(Comic::getAutor).thenComparing(Comic::getTitulo);
                 break;
             case "id":
-                comparador = Comparator.comparing(Comic::getId);
+                comparador = Comparator.comparingInt(c -> Integer.parseInt(c.getId()));
                 break;
             default:
                 comparador = Comparator.comparing(Comic::getTitulo);
@@ -140,13 +171,18 @@ public class TiendaDeComics {
     }
 
     public void mostrarUsuarios() {
-
-        HashSet<String> emails = new HashSet<>();
-        for (Usuario usuario : usuarios.values()) {
-            if (!emails.contains(usuario.getEmail())) {
-                System.out.println(usuario);
-                emails.add(usuario.getEmail());
-            }
+        // TreeSet para evitar duplicados y mostrar usuarios ordenados por email
+        TreeSet<Usuario> usuariosOrdenados = new TreeSet<>(Comparator.comparing(Usuario::getEmail));
+        usuariosOrdenados.addAll(usuarios.values());
+        for (Usuario usuario : usuariosOrdenados) {
+            System.out.println(usuario);
         }
+    }
+
+    /**
+     * Devuelve la lista de cómics (solo para búsquedas y utilidades).
+     */
+    public List<Comic> getComics() {
+        return new ArrayList<>(comics);
     }
 }
