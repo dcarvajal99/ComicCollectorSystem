@@ -120,9 +120,19 @@ public class TiendaDeComics {
         usuariosServicio.escribirUsuariosCSV(rutaArchivo, datos);
     }
 
-    public void mostrarComics() {
-
-        TreeSet<Comic> comicsOrdenados = new TreeSet<>(Comparator.comparing(Comic::getId));
+    public void mostrarComics(String criterio) {
+        Comparator<Comic> comparador;
+        switch (criterio) {
+            case "autor":
+                comparador = Comparator.comparing(Comic::getAutor);
+                break;
+            case "id":
+                comparador = Comparator.comparing(Comic::getId);
+                break;
+            default:
+                comparador = Comparator.comparing(Comic::getTitulo);
+        }
+        TreeSet<Comic> comicsOrdenados = new TreeSet<>(comparador);
         comicsOrdenados.addAll(comics);
         for (Comic comic : comicsOrdenados) {
             System.out.println(comic);

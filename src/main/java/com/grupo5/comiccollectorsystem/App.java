@@ -8,10 +8,6 @@ import com.grupo5.comiccollectorsystem.exceptions.ComicYaPrestadoException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-/**
- *
- * @author grupo5
- */
 public class App {
 
     private static final String DATA_DIR = "src/main/java/com/grupo5/comiccollectorsystem/data/";
@@ -35,7 +31,13 @@ public class App {
                 scanner.nextLine(); // Limpiar buffer
                 switch (opcion) {
                     case 1:
-                        tiendaDeComics.mostrarComics();
+                        int orden = pedirOpcionOrdenamiento(scanner);
+                        String criterio = switch (orden) {
+                            case 2 -> "autor";
+                            case 3 -> "id";
+                            default -> "titulo";
+                        };
+                        tiendaDeComics.mostrarComics(criterio);
                         break;
                     case 2:
                         tiendaDeComics.mostrarUsuarios();
@@ -115,5 +117,30 @@ public class App {
             }
         } while (valor.contains("|"));
         return valor;
+    }
+
+    private static int pedirOpcionOrdenamiento(Scanner scanner) {
+        int opcion = 0;
+        boolean valido = false;
+        do {
+            System.out.println("¿Cómo desea ordenar los cómics?");
+            System.out.println("1. Por título");
+            System.out.println("2. Por autor");
+            System.out.println("3. Por id");
+            System.out.print("Seleccione una opción: ");
+            try {
+                opcion = scanner.nextInt();
+                scanner.nextLine(); // Limpiar buffer
+                if (opcion >= 1 && opcion <= 3) {
+                    valido = true;
+                } else {
+                    System.out.println("Opción no válida. Intente nuevamente.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Debe ingresar un número.");
+                scanner.nextLine();
+            }
+        } while (!valido);
+        return opcion;
     }
 }
