@@ -1,20 +1,22 @@
-package com.grupo5.comiccollectorsystem.controllers;
+package com.diegocarvajal.comiccollectorsystem.controllers;
 
-import com.grupo5.comiccollectorsystem.models.TiendaDeComics;
-import com.grupo5.comiccollectorsystem.models.Comic;
-import com.grupo5.comiccollectorsystem.models.Usuario;
-import com.grupo5.comiccollectorsystem.exceptions.ComicNoEncontradoException;
-import com.grupo5.comiccollectorsystem.exceptions.ComicYaPrestadoException;
-import com.grupo5.comiccollectorsystem.utils.InputUtils;
+import com.diegocarvajal.comiccollectorsystem.models.TiendaDeComics;
+import com.diegocarvajal.comiccollectorsystem.models.Comic;
+import com.diegocarvajal.comiccollectorsystem.models.Usuario;
+import com.diegocarvajal.comiccollectorsystem.exceptions.ComicNoEncontradoException;
+import com.diegocarvajal.comiccollectorsystem.exceptions.ComicYaPrestadoException;
+import com.diegocarvajal.comiccollectorsystem.utils.InputUtils;
 import java.util.*;
 
 /**
  * Controlador principal del menú y las acciones de la aplicación.
+ * Se encarga de mostrar el menú, recibir las opciones del usuario y ejecutar las acciones correspondientes
+ * como mostrar, buscar, prestar y registrar cómics y usuarios.
  */
 public class MenuController {
     private final TiendaDeComics tiendaDeComics;
     private final Scanner scanner;
-    private final String DATA_DIR = "src/main/java/com/grupo5/comiccollectorsystem/data/";
+    private final String DATA_DIR = "src/main/java/com/diegocarvajal/comiccollectorsystem/data/";
 
     public MenuController(TiendaDeComics tiendaDeComics, Scanner scanner) {
         this.tiendaDeComics = tiendaDeComics;
@@ -22,6 +24,7 @@ public class MenuController {
     }
 
     public void mostrarMenuPrincipal() {
+        // Muestra el menú principal y gestiona la interacción con el usuario
         boolean salir = false;
         while (!salir) {
             System.out.println("\n--- Menú Biblioteca DUOC UC ---");
@@ -37,13 +40,14 @@ public class MenuController {
                 int opcion = scanner.nextInt();
                 scanner.nextLine(); // Limpiar buffer
                 switch (opcion) {
-                    case 1 -> mostrarComics();
-                    case 2 -> tiendaDeComics.mostrarUsuarios();
-                    case 3 -> buscarComic();
-                    case 4 -> prestarComic();
-                    case 5 -> registrarUsuario();
-                    case 7 -> registrarComic();
+                    case 1 -> mostrarComics(); // Muestra la lista de cómics
+                    case 2 -> tiendaDeComics.mostrarUsuarios(); // Muestra la lista de usuarios
+                    case 3 -> buscarComic(); // Permite buscar cómics por id, título o autor
+                    case 4 -> prestarComic(); // Permite prestar un cómic a un usuario
+                    case 5 -> registrarUsuario(); // Permite registrar un nuevo usuario
+                    case 7 -> registrarComic(); // Permite registrar un nuevo cómic
                     case 8 -> {
+                        // Guarda los datos y sale del programa
                         tiendaDeComics.guardarComicsEnCSV(DATA_DIR+"comics.csv");
                         tiendaDeComics.guardarUsuariosEnCSV(DATA_DIR+"usuarios.csv");
                         System.out.println("Datos guardados. Saliendo...");
@@ -58,6 +62,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Muestra los cómics ordenados según el criterio elegido por el usuario.
+     */
     public void mostrarComics() {
         int orden = InputUtils.pedirOpcionOrdenamiento(scanner);
         String criterio = switch (orden) {
@@ -68,6 +75,9 @@ public class MenuController {
         tiendaDeComics.mostrarComics(criterio);
     }
 
+    /**
+     * Permite buscar cómics por id, título o autor según elección del usuario.
+     */
     public void buscarComic() {
         int opcion = pedirCriterioBusqueda();
         List<Comic> resultados = switch (opcion) {
@@ -79,6 +89,9 @@ public class MenuController {
         mostrarResultadosBusqueda(resultados, opcion);
     }
 
+    /**
+     * Solicita al usuario el criterio de búsqueda (id, título o autor).
+     */
     private int pedirCriterioBusqueda() {
         System.out.println("¿Cómo desea buscar el cómic?");
         System.out.println("1. Por ID");
@@ -96,6 +109,9 @@ public class MenuController {
         return opcion;
     }
 
+    /**
+     * Busca un cómic por su id y lo devuelve en una lista (o vacía si no existe).
+     */
     private List<Comic> buscarPorId() {
         System.out.print("Ingrese el ID del comic: ");
         String id = scanner.nextLine();
@@ -109,6 +125,9 @@ public class MenuController {
         return resultados;
     }
 
+    /**
+     * Busca cómics por coincidencia parcial en el título.
+     */
     private List<Comic> buscarPorTitulo() {
         System.out.print("Ingrese el título del comic: ");
         String titulo = scanner.nextLine();
@@ -121,6 +140,9 @@ public class MenuController {
         return resultados;
     }
 
+    /**
+     * Busca cómics por coincidencia parcial en el autor.
+     */
     private List<Comic> buscarPorAutor() {
         System.out.print("Ingrese el autor del comic: ");
         String autor = scanner.nextLine();
@@ -133,6 +155,9 @@ public class MenuController {
         return resultados;
     }
 
+    /**
+     * Muestra los resultados de la búsqueda de cómics, ordenados según el criterio.
+     */
     private void mostrarResultadosBusqueda(List<Comic> resultados, int criterio) {
         if (resultados.isEmpty()) {
             System.out.println("No se encontraron cómics con el criterio ingresado.");
@@ -148,6 +173,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Permite prestar un cómic a un usuario registrado, mostrando primero los cómics y permitiendo buscar por ID o título.
+     */
     public void prestarComic() {
         System.out.println("\n--- Préstamo de cómic ---");
         if (preguntarSiMostrarComics()) {
@@ -171,6 +199,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Pregunta al usuario si desea ver la lista de cómics antes de prestar.
+     */
     private boolean preguntarSiMostrarComics() {
         System.out.println("¿Desea ver la lista de cómics antes de prestar?");
         System.out.println("1. Sí");
@@ -187,6 +218,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Permite seleccionar un cómic para prestar, buscando por id o título.
+     */
     private Comic seleccionarComicParaPrestar() {
         System.out.println("¿Cómo desea buscar el cómic a prestar?");
         System.out.println("1. Por ID");
@@ -220,11 +254,17 @@ public class MenuController {
         }
     }
 
+    /**
+     * Solicita el email del usuario que retira el cómic.
+     */
     private String pedirEmailUsuario() {
         System.out.print("Ingrese el email del usuario que lo retira: ");
         return scanner.nextLine();
     }
 
+    /**
+     * Permite registrar un nuevo usuario validando los datos ingresados.
+     */
     public void registrarUsuario() {
         String nombre = InputUtils.pedirCampoNoVacio(scanner, "Nombre");
         String apellido = InputUtils.pedirCampoNoVacio(scanner, "Apellido");
@@ -235,6 +275,9 @@ public class MenuController {
         System.out.println("Usuario registrado correctamente.");
     }
 
+    /**
+     * Permite registrar un nuevo cómic validando los datos ingresados.
+     */
     public void registrarComic() {
         String tituloComic = InputUtils.pedirCampoNoVacio(scanner, "Título");
         String autorComic = InputUtils.pedirCampoNoVacio(scanner, "Autor");
@@ -248,4 +291,3 @@ public class MenuController {
         System.out.println("Comic registrado correctamente.");
     }
 }
-

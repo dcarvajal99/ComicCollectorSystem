@@ -1,23 +1,36 @@
-package com.grupo5.comiccollectorsystem.models;
+package com.diegocarvajal.comiccollectorsystem.models;
 
-import com.grupo5.comiccollectorsystem.services.ComicsServicio;
-import com.grupo5.comiccollectorsystem.services.UsuariosServicio;
-import com.grupo5.comiccollectorsystem.exceptions.ComicNoEncontradoException;
-import com.grupo5.comiccollectorsystem.exceptions.ComicYaPrestadoException;
+import com.diegocarvajal.comiccollectorsystem.services.ComicsServicio;
+import com.diegocarvajal.comiccollectorsystem.services.UsuariosServicio;
+import com.diegocarvajal.comiccollectorsystem.exceptions.ComicNoEncontradoException;
+import com.diegocarvajal.comiccollectorsystem.exceptions.ComicYaPrestadoException;
 
 import java.util.*;
 
+/**
+ * Clase principal que gestiona la lógica de la tienda de cómics.
+ * Aquí se almacenan y manipulan los cómics y usuarios, y se realizan operaciones como registrar, buscar, prestar y guardar datos.
+ */
 public class TiendaDeComics {
+    // Lista de cómics disponibles en la tienda
     private ArrayList<Comic> comics = new ArrayList<>();
+    // Mapa de usuarios registrados, usando el email como clave para evitar duplicados
     private HashMap<String, Usuario> usuarios = new HashMap<>();
+    // Servicios para leer y escribir archivos CSV de cómics y usuarios
     private ComicsServicio comicsServicio = new ComicsServicio();
     private UsuariosServicio usuariosServicio = new UsuariosServicio();
 
+    /**
+     * Constructor: carga los datos de cómics y usuarios desde archivos CSV al iniciar la aplicación.
+     */
     public TiendaDeComics() {
-        cargarComicsDesdeCSV("src/main/java/com/grupo5/comiccollectorsystem/data/comics.csv");
-        cargarUsuariosDesdeCSV("src/main/java/com/grupo5/comiccollectorsystem/data/usuarios.csv");
+        cargarComicsDesdeCSV("src/main/java/com/diegocarvajal/comiccollectorsystem/data/comics.csv");
+        cargarUsuariosDesdeCSV("src/main/java/com/diegocarvajal/comiccollectorsystem/data/usuarios.csv");
     }
 
+    /**
+     * Lee los cómics desde un archivo CSV y los agrega a la lista.
+     */
     private void cargarComicsDesdeCSV(String rutaArchivo) {
         List<String[]> datos = comicsServicio.leerComicCSV(rutaArchivo);
         boolean esPrimera = true;
@@ -37,6 +50,9 @@ public class TiendaDeComics {
         }
     }
 
+    /**
+     * Lee los usuarios desde un archivo CSV y los agrega al mapa de usuarios.
+     */
     private void cargarUsuariosDesdeCSV(String rutaArchivo) {
         List<String[]> datos = usuariosServicio.leerUsuariosCSV(rutaArchivo);
         boolean esPrimera = true;
@@ -50,10 +66,16 @@ public class TiendaDeComics {
         }
     }
 
+    /**
+     * Agrega un cómic a la lista (no asigna id automáticamente).
+     */
     public void agregarComic(Comic comic) {
         comics.add(comic);
     }
 
+    /**
+     * Registra un nuevo cómic, asignando un id incremental y estado disponible o prestado según si está asignado.
+     */
     public void registrarComic(String titulo, String autor, String asignadoA) {
         // Buscar el id más alto actual
         int maxId = 0;
@@ -75,6 +97,9 @@ public class TiendaDeComics {
         comics.add(comic);
     }
 
+    /**
+     * Registra un nuevo usuario, asignando un id incremental único y evitando duplicados por email.
+     */
     public void registrarUsuario(Usuario usuario) {
         if (usuarios.containsKey(usuario.getEmail())) {
             System.out.println("Error: Ya existe un usuario registrado con ese email.");
@@ -94,6 +119,10 @@ public class TiendaDeComics {
         usuarios.put(usuario.getEmail(), usuario);
     }
 
+    /**
+     * Busca un cómic por su título (ignorando mayúsculas/minúsculas).
+     * Lanza excepción si no lo encuentra.
+     */
     public Comic buscarComic(String titulo) throws ComicNoEncontradoException {
         for (Comic comic : comics) {
             if (comic.getTitulo().equalsIgnoreCase(titulo)) {
@@ -105,6 +134,7 @@ public class TiendaDeComics {
 
     /**
      * Busca un cómic por su ID.
+     * Lanza excepción si no lo encuentra.
      */
     public Comic buscarComicPorId(String id) throws ComicNoEncontradoException {
         for (Comic comic : comics) {
@@ -117,6 +147,7 @@ public class TiendaDeComics {
 
     /**
      * Busca todos los cómics de un autor (ignorando mayúsculas/minúsculas).
+     * Devuelve una lista de cómics encontrados.
      */
     public List<Comic> buscarComicsPorAutor(String autor) {
         List<Comic> resultado = new ArrayList<>();
@@ -128,6 +159,10 @@ public class TiendaDeComics {
         return resultado;
     }
 
+    /**
+     * Presta un cómic a un usuario registrado, cambiando su estado y asignando el email del usuario.
+     * Lanza excepción si el cómic no existe o ya está prestado.
+     */
     public void prestarComic(String titulo, String emailUsuario) throws ComicNoEncontradoException, ComicYaPrestadoException {
         Comic comic = buscarComic(titulo);
         if (!comic.getEstado()) {
@@ -138,10 +173,16 @@ public class TiendaDeComics {
         System.out.println("Comic prestado con éxito: " + titulo + " a " + emailUsuario);
     }
 
+    /**
+     * Devuelve el usuario registrado con el email dado, o null si no existe.
+     */
     public Usuario getUsuarioPorEmail(String email) {
         return usuarios.get(email);
     }
 
+    /**
+     * Guarda la lista de cómics en un archivo CSV usando el servicio correspondiente.
+     */
     public void guardarComicsEnCSV(String rutaArchivo) {
         List<String[]> datos = new ArrayList<>();
         for (Comic comic : comics) {
@@ -150,6 +191,9 @@ public class TiendaDeComics {
         comicsServicio.escribirComicsCSV(rutaArchivo, datos);
     }
 
+    /**
+     * Guarda la lista de usuarios en un archivo CSV usando el servicio correspondiente.
+     */
     public void guardarUsuariosEnCSV(String rutaArchivo) {
         List<String[]> datos = new ArrayList<>();
         for (Usuario usuario : usuarios.values()) {
@@ -158,6 +202,9 @@ public class TiendaDeComics {
         usuariosServicio.escribirUsuariosCSV(rutaArchivo, datos);
     }
 
+    /**
+     * Muestra los cómics ordenados según el criterio (título, autor o id), evitando duplicados.
+     */
     public void mostrarComics(String criterio) {
         // TreeSet para evitar duplicados y mostrar cómics ordenados según el criterio
         Comparator<Comic> comparador;
@@ -178,6 +225,9 @@ public class TiendaDeComics {
         }
     }
 
+    /**
+     * Muestra los usuarios ordenados por email, evitando duplicados.
+     */
     public void mostrarUsuarios() {
         // TreeSet para evitar duplicados y mostrar usuarios ordenados por email
         TreeSet<Usuario> usuariosOrdenados = new TreeSet<>(Comparator.comparing(Usuario::getEmail));

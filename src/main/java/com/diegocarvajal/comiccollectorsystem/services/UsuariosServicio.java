@@ -1,4 +1,4 @@
-package com.grupo5.comiccollectorsystem.services;
+package com.diegocarvajal.comiccollectorsystem.services;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,10 +8,18 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.File;
 
+/**
+ * Servicio para leer y escribir archivos CSV de usuarios.
+ * Permite guardar y cargar la información de los usuarios en formato texto.
+ */
 public class UsuariosServicio {
 
+    // Encabezado estándar para el archivo CSV de usuarios
     private static final String ENCABEZADO = "id|nombre|apellido|email|telefono";
 
+    /**
+     * Lee la lista de usuarios desde un archivo CSV, devolviendo cada fila como un arreglo de Strings.
+     */
     public List<String[]> leerUsuariosCSV(String rutaArchivo) {
         List<String[]> datos = new ArrayList<>();
         File archivo = new File(rutaArchivo);
@@ -37,6 +45,9 @@ public class UsuariosServicio {
         return datos;
     }
 
+    /**
+     * Escribe la lista de usuarios en un archivo CSV, agregando el encabezado y separando los campos por '|'.
+     */
     public void escribirUsuariosCSV(String rutaArchivo, List<String[]> datos) {
         File archivo = new File(rutaArchivo);
         if (!archivo.exists()) {

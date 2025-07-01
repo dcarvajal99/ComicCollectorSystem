@@ -1,14 +1,16 @@
-package com.grupo5.comiccollectorsystem.utils;
+package com.diegocarvajal.comiccollectorsystem.utils;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Utilidades para validación y entrada de datos por consola.
+ * Clase de utilidades para validación y entrada de datos por consola.
+ * Contiene métodos estáticos para pedir y validar campos como nombre, email, teléfono y opciones de menú.
  */
 public class InputUtils {
     /**
      * Solicita un campo al usuario y valida que no esté vacío ni contenga '|'.
+     * Devuelve el valor ingresado por el usuario.
      */
     public static String pedirCampoNoVacio(Scanner scanner, String campo) {
         String valor;
@@ -25,7 +27,8 @@ public class InputUtils {
     }
 
     /**
-     * Solicita y valida un email.
+     * Solicita y valida un email (formato correcto y sin '|').
+     * Devuelve el email ingresado por el usuario.
      */
     public static String pedirEmail(Scanner scanner) {
         String email;
@@ -43,6 +46,7 @@ public class InputUtils {
 
     /**
      * Solicita y valida un teléfono (solo dígitos, mínimo 7).
+     * Devuelve el teléfono ingresado por el usuario.
      */
     public static String pedirTelefono(Scanner scanner) {
         String telefono;
@@ -59,7 +63,8 @@ public class InputUtils {
     }
 
     /**
-     * Solicita al usuario el criterio de ordenamiento de cómics.
+     * Solicita al usuario el criterio de ordenamiento de cómics (título, autor o id).
+     * Devuelve la opción seleccionada.
      */
     public static int pedirOpcionOrdenamiento(Scanner scanner) {
         int opcion = 0;
@@ -86,4 +91,3 @@ public class InputUtils {
         return opcion;
     }
 }
-

@@ -4,7 +4,7 @@ Este es un sistema de gestión de cómics desarrollado en Java. Permite gestiona
 
 ## Estructura del proyecto
 
-- `src/main/java/com/grupo5/comiccollectorsystem/App.java`: Clase principal con menú interactivo.
+- `src/main/java/com/diegocarvajal/comiccollectorsystem/App.java`: Clase principal con menú interactivo.
 - `models/`: Contiene las clases de dominio (`Comic`, `Usuario`, `TiendaDeComics`).
 - `services/`: Servicios para leer y escribir archivos CSV de cómics y usuarios.
 - `exceptions/`: Excepciones personalizadas para la lógica de negocio.
@@ -26,7 +26,7 @@ Este es un sistema de gestión de cómics desarrollado en Java. Permite gestiona
 
 ## Notas
 
-- Los archivos `comics.csv` y `usuarios.csv` se encuentran en `src/main/java/com/grupo5/comiccollectorsystem/data/`.
+- Los archivos `comics.csv` y `usuarios.csv` se encuentran en `src/main/java/com/diegocarvajal/comiccollectorsystem/data/`.
 - Si los archivos no existen, el sistema los crea automáticamente con la cabecera correspondiente.
 - No uses el carácter `|` en los campos de entrada.
 

@@ -1,5 +1,9 @@
-package com.grupo5.comiccollectorsystem.models;
+package com.diegocarvajal.comiccollectorsystem.models;
 
+/**
+ * Clase que representa un cómic en la tienda.
+ * Contiene información como id, título, autor, estado (disponible/prestado) y a quién está asignado.
+ */
 public class Comic {
     private String id;
     private String titulo;
@@ -22,6 +26,7 @@ public class Comic {
     }
 
     public Comic(String id, String titulo, String autor, Boolean estado, String asignadoA) {
+        // Constructor principal que recibe todos los datos del cómic
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -71,6 +76,7 @@ public class Comic {
 
     @Override
     public String toString() {
+        // Devuelve una representación legible del cómic para mostrar en consola
         String estadoStr = estado ? "Disponible" : "Prestado a: " + (asignadoA != null ? asignadoA : "-");
         return "Id: " + id + ", Título: " + titulo + ", Autor: " + autor + ", Estado: " + estadoStr;
     }

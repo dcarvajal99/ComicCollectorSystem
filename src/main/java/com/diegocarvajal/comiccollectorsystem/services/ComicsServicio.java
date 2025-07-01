@@ -1,4 +1,4 @@
-package com.grupo5.comiccollectorsystem.services;
+package com.diegocarvajal.comiccollectorsystem.services;
 
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
@@ -6,10 +6,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 
+/**
+ * Servicio para leer y escribir archivos CSV de cómics.
+ * Permite guardar y cargar la información de los cómics en formato texto.
+ */
 public class ComicsServicio {
 
+    // Encabezado estándar para el archivo CSV de cómics
     private static final String ENCABEZADO = "id|titulo|autor|estado|asignadoA";
 
+    /**
+     * Escribe la lista de cómics en un archivo CSV, agregando el encabezado y separando los campos por '|'.
+     */
     public void escribirComicsCSV(String rutaArchivo, java.util.List<String[]> datos) {
         File archivo = new File(rutaArchivo);
         if (!archivo.exists()) {
@@ -33,6 +41,9 @@ public class ComicsServicio {
         }
     }
 
+    /**
+     * Lee la lista de cómics desde un archivo CSV, devolviendo cada fila como un arreglo de Strings.
+     */
     public java.util.List<String[]> leerComicCSV(String rutaArchivo) {
         java.util.List<String[]> datos = new java.util.ArrayList<>();
         File archivo = new File(rutaArchivo);
@@ -59,4 +70,3 @@ public class ComicsServicio {
     }
 
 }
-

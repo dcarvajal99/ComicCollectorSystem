@@ -1,5 +1,9 @@
-package com.grupo5.comiccollectorsystem.models;
+package com.diegocarvajal.comiccollectorsystem.models;
 
+/**
+ * Clase que representa a un usuario del sistema.
+ * Contiene información como id, nombre, apellido, email y teléfono.
+ */
 public class Usuario {
     private String id;
     private String nombre;
@@ -8,6 +12,7 @@ public class Usuario {
     private String telefono;
 
     public Usuario(String id, String nombre, String apellido, String email, String telefono) {
+        // Constructor principal que recibe todos los datos del usuario
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -57,7 +62,7 @@ public class Usuario {
 
     @Override
     public String toString() {
+        // Devuelve una representación legible del usuario para mostrar en consola
         return "Id: " + id + ", Nombre: " + nombre + ", Apellido: " + apellido + ", Email: " + email + ", Teléfono: " + telefono;
     }
-
 }
