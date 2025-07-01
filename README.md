@@ -32,6 +32,6 @@ Este es un sistema de gestión de cómics desarrollado en Java. Permite gestiona
 
 ## Autores
 
-Diego Carvajal - Carolina Solis
+Diego Carvajal
 
 Grupo 5 - Duoc UC
